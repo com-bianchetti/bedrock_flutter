@@ -4,7 +4,7 @@ import 'package:bedrock_flutter/main/bedrock_provider.dart';
 import 'package:bedrock_flutter/src/style/bedrock_theme_data.dart';
 import 'package:flutter/material.dart';
 
-class BedrockApp extends StatelessWidget {
+class BedrockApp extends StatefulWidget {
   /// The color scheme to use for the Bedrock app.
   /// When you specify a list of alternative color schemes on [BedrockThemeData],
   /// you can use this which will be used.
@@ -604,128 +604,316 @@ class BedrockApp extends StatelessWidget {
        initialRoute = null;
 
   @override
+  State<BedrockApp> createState() => _BedrockAppState();
+}
+
+class _BedrockAppState extends State<BedrockApp> {
+  String? activeColorScheme;
+  late ValueNotifier<ThemeMode?> theme;
+
+  @override
+  void initState() {
+    super.initState();
+    activeColorScheme = widget.colorScheme;
+    theme = ValueNotifier(
+      widget.colorScheme != null ? null : ThemeMode.light,
+    );
+  }
+
+  void toggleTheme() {
+    activeColorScheme = null;
+    theme.value = theme.value == ThemeMode.light
+        ? ThemeMode.dark
+        : ThemeMode.light;
+  }
+
+  void setColorScheme(String colorScheme) {
+    activeColorScheme = colorScheme;
+    theme.value = null;
+  }
+
+  @override
+  void dispose() {
+    theme.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final theme = bedrockTheme ?? BedrockThemeData();
-    final colorScheme =
-        theme.colorSchemes?[this.colorScheme] ?? theme.colorSchemeLight;
-    return BedrockTheme(
-      theme: theme,
-      colorScheme: this.colorScheme,
-      child: routerDelegate != null
-          ? MaterialApp.router(
-              onNavigationNotification: onNavigationNotification,
-              builder: builder,
-              title: title,
-              onGenerateTitle: onGenerateTitle,
-              color: color,
-              darkTheme: ThemeData(
-                useMaterial3: false,
-                brightness: colorScheme.brightness,
-                colorScheme: colorScheme,
-                textTheme: theme.textTheme,
-                scaffoldBackgroundColor: colorScheme.surface,
-                appBarTheme: AppBarTheme(
-                  backgroundColor: colorScheme.surface,
-                  foregroundColor: colorScheme.onSurface,
+    final theme = widget.bedrockTheme ?? BedrockThemeData();
+
+    return ValueListenableBuilder(
+      valueListenable: this.theme,
+      builder: (context, value, child) {
+        final colorScheme = theme.colorSchemes?[activeColorScheme ?? ''];
+        return BedrockTheme(
+          theme: theme,
+          colorScheme: widget.colorScheme,
+          toggleTheme: toggleTheme,
+          setColorScheme: setColorScheme,
+          child: widget.routerDelegate != null
+              ? MaterialApp.router(
+                  onNavigationNotification: widget.onNavigationNotification,
+                  builder: widget.builder,
+                  title: widget.title,
+                  onGenerateTitle: widget.onGenerateTitle,
+                  color: widget.color,
+                  darkTheme: ThemeData(
+                    useMaterial3: false,
+                    brightness: theme.colorSchemeDark.brightness,
+                    colorScheme: theme.colorSchemeDark,
+                    textTheme: theme.textTheme
+                        .copyWith(
+                          labelLarge: theme.textTheme.labelLarge?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          labelMedium: theme.textTheme.labelMedium?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          labelSmall: theme.textTheme.labelSmall?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          bodySmall: theme.textTheme.bodySmall?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          titleSmall: theme.textTheme.titleSmall?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                        )
+                        .apply(
+                          bodyColor: theme.colorSchemeDark.onSurface,
+                          displayColor: theme.colorSchemeDark.onSurface,
+                        ),
+                    scaffoldBackgroundColor: theme.colorSchemeDark.surface,
+                    appBarTheme: AppBarTheme(
+                      backgroundColor: theme.colorSchemeDark.surface,
+                      foregroundColor: theme.colorSchemeDark.onSurface,
+                      elevation: 0,
+                    ),
+                  ),
+                  theme: ThemeData(
+                    useMaterial3: false,
+                    brightness:
+                        colorScheme?.brightness ??
+                        theme.colorSchemeLight.brightness,
+                    colorScheme: colorScheme ?? theme.colorSchemeLight,
+                    textTheme: theme.textTheme
+                        .copyWith(
+                          labelLarge: theme.textTheme.labelLarge?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          labelMedium: theme.textTheme.labelMedium?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          labelSmall: theme.textTheme.labelSmall?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          bodySmall: theme.textTheme.bodySmall?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          titleSmall: theme.textTheme.titleSmall?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                        )
+                        .apply(
+                          bodyColor:
+                              colorScheme?.onSurface ??
+                              theme.colorSchemeLight.onSurface,
+                          displayColor:
+                              colorScheme?.onSurface ??
+                              theme.colorSchemeLight.onSurface,
+                        ),
+                    scaffoldBackgroundColor:
+                        colorScheme?.surface ?? theme.colorSchemeLight.surface,
+                    appBarTheme: AppBarTheme(
+                      backgroundColor:
+                          colorScheme?.surface ??
+                          theme.colorSchemeLight.surface,
+                      foregroundColor:
+                          colorScheme?.onSurface ??
+                          theme.colorSchemeLight.onSurface,
+                      elevation: 0,
+                    ),
+                  ),
+                  themeMode: value ?? ThemeMode.light,
+                  themeAnimationDuration: widget.themeAnimationDuration,
+                  themeAnimationCurve: widget.themeAnimationCurve,
+                  locale: widget.locale,
+                  localizationsDelegates: widget.localizationsDelegates,
+                  localeListResolutionCallback:
+                      widget.localeListResolutionCallback,
+                  localeResolutionCallback: widget.localeResolutionCallback,
+                  supportedLocales: widget.supportedLocales,
+                  debugShowMaterialGrid: widget.debugShowMaterialGrid,
+                  showPerformanceOverlay: widget.showPerformanceOverlay,
+                  checkerboardRasterCacheImages:
+                      widget.checkerboardRasterCacheImages,
+                  checkerboardOffscreenLayers:
+                      widget.checkerboardOffscreenLayers,
+                  showSemanticsDebugger: widget.showSemanticsDebugger,
+                  debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
+                  shortcuts: widget.shortcuts,
+                  actions: widget.actions,
+                  restorationScopeId: widget.restorationScopeId,
+                  scrollBehavior: widget.scrollBehavior,
+                  useInheritedMediaQuery: widget.useInheritedMediaQuery,
+                  themeAnimationStyle: widget.themeAnimationStyle,
+                  routerDelegate: widget.routerDelegate,
+                  routeInformationParser: widget.routeInformationParser,
+                  routerConfig: widget.routerConfig,
+                  backButtonDispatcher: widget.backButtonDispatcher,
+                  scaffoldMessengerKey: widget.scaffoldMessengerKey,
+                )
+              : MaterialApp(
+                  home: widget.home,
+                  routes: widget.routes ?? {},
+                  initialRoute: widget.initialRoute,
+                  onGenerateRoute: widget.onGenerateRoute,
+                  onGenerateInitialRoutes: widget.onGenerateInitialRoutes,
+                  onUnknownRoute: widget.onUnknownRoute,
+                  onNavigationNotification: widget.onNavigationNotification,
+                  navigatorObservers: widget.navigatorObservers ?? [],
+                  builder: widget.builder,
+                  title: widget.title,
+                  onGenerateTitle: widget.onGenerateTitle,
+                  color: widget.color,
+                  highContrastTheme: widget.highContrastTheme,
+                  highContrastDarkTheme: widget.highContrastDarkTheme,
+                  darkTheme: ThemeData(
+                    useMaterial3: false,
+                    brightness: theme.colorSchemeDark.brightness,
+                    colorScheme: theme.colorSchemeDark,
+                    textTheme: theme.textTheme
+                        .copyWith(
+                          labelLarge: theme.textTheme.labelLarge?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          labelMedium: theme.textTheme.labelMedium?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          labelSmall: theme.textTheme.labelSmall?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          bodySmall: theme.textTheme.bodySmall?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                          titleSmall: theme.textTheme.titleSmall?.copyWith(
+                            color:
+                                theme.colorSchemeDark.surfaceContainerHighest,
+                          ),
+                        )
+                        .apply(
+                          bodyColor: theme.colorSchemeDark.onSurface,
+                          displayColor: theme.colorSchemeDark.onSurface,
+                        ),
+                    scaffoldBackgroundColor: theme.colorSchemeDark.surface,
+                    appBarTheme: AppBarTheme(
+                      backgroundColor: theme.colorSchemeDark.surface,
+                      foregroundColor: theme.colorSchemeDark.onSurface,
+                      elevation: 0,
+                    ),
+                  ),
+                  theme: ThemeData(
+                    useMaterial3: false,
+                    brightness:
+                        colorScheme?.brightness ??
+                        theme.colorSchemeLight.brightness,
+                    colorScheme: colorScheme ?? theme.colorSchemeLight,
+                    textTheme: theme.textTheme
+                        .copyWith(
+                          labelLarge: theme.textTheme.labelLarge?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          labelMedium: theme.textTheme.labelMedium?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          labelSmall: theme.textTheme.labelSmall?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          bodySmall: theme.textTheme.bodySmall?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                          titleSmall: theme.textTheme.titleSmall?.copyWith(
+                            color:
+                                colorScheme?.surfaceContainerHighest ??
+                                theme.colorSchemeLight.surfaceContainerHighest,
+                          ),
+                        )
+                        .apply(
+                          bodyColor:
+                              colorScheme?.onSurface ??
+                              theme.colorSchemeLight.onSurface,
+                          displayColor:
+                              colorScheme?.onSurface ??
+                              theme.colorSchemeLight.onSurface,
+                        ),
+                    scaffoldBackgroundColor:
+                        colorScheme?.surface ?? theme.colorSchemeLight.surface,
+                    appBarTheme: AppBarTheme(
+                      backgroundColor:
+                          colorScheme?.surface ??
+                          theme.colorSchemeLight.surface,
+                      foregroundColor:
+                          colorScheme?.onSurface ??
+                          theme.colorSchemeLight.onSurface,
+                      elevation: 0,
+                    ),
+                  ),
+                  themeMode: value ?? ThemeMode.light,
+                  themeAnimationDuration: widget.themeAnimationDuration,
+                  themeAnimationCurve: widget.themeAnimationCurve,
+                  locale: widget.locale,
+                  localizationsDelegates: widget.localizationsDelegates,
+                  localeListResolutionCallback:
+                      widget.localeListResolutionCallback,
+                  localeResolutionCallback: widget.localeResolutionCallback,
+                  supportedLocales: widget.supportedLocales,
+                  debugShowMaterialGrid: widget.debugShowMaterialGrid,
+                  showPerformanceOverlay: widget.showPerformanceOverlay,
+                  checkerboardRasterCacheImages:
+                      widget.checkerboardRasterCacheImages,
+                  checkerboardOffscreenLayers:
+                      widget.checkerboardOffscreenLayers,
+                  showSemanticsDebugger: widget.showSemanticsDebugger,
+                  debugShowCheckedModeBanner: widget.debugShowCheckedModeBanner,
+                  shortcuts: widget.shortcuts,
+                  actions: widget.actions,
+                  restorationScopeId: widget.restorationScopeId,
+                  scrollBehavior: widget.scrollBehavior,
+                  useInheritedMediaQuery: widget.useInheritedMediaQuery,
+                  themeAnimationStyle: widget.themeAnimationStyle,
+                  navigatorKey: widget.navigatorKey,
+                  scaffoldMessengerKey: widget.scaffoldMessengerKey,
                 ),
-              ),
-              theme: ThemeData(
-                useMaterial3: false,
-                brightness: colorScheme.brightness,
-                colorScheme: colorScheme,
-                textTheme: theme.textTheme,
-                scaffoldBackgroundColor: colorScheme.surface,
-                appBarTheme: AppBarTheme(
-                  backgroundColor: colorScheme.surface,
-                  foregroundColor: colorScheme.onSurface,
-                ),
-              ),
-              themeMode: theme.themeMode,
-              themeAnimationDuration: themeAnimationDuration,
-              themeAnimationCurve: themeAnimationCurve,
-              locale: locale,
-              localizationsDelegates: localizationsDelegates,
-              localeListResolutionCallback: localeListResolutionCallback,
-              localeResolutionCallback: localeResolutionCallback,
-              supportedLocales: supportedLocales,
-              debugShowMaterialGrid: debugShowMaterialGrid,
-              showPerformanceOverlay: showPerformanceOverlay,
-              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-              showSemanticsDebugger: showSemanticsDebugger,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-              shortcuts: shortcuts,
-              actions: actions,
-              restorationScopeId: restorationScopeId,
-              scrollBehavior: scrollBehavior,
-              useInheritedMediaQuery: useInheritedMediaQuery,
-              themeAnimationStyle: themeAnimationStyle,
-              routerDelegate: routerDelegate,
-              routeInformationParser: routeInformationParser,
-              routerConfig: routerConfig,
-              backButtonDispatcher: backButtonDispatcher,
-              scaffoldMessengerKey: scaffoldMessengerKey,
-            )
-          : MaterialApp(
-              home: home,
-              routes: routes ?? {},
-              initialRoute: initialRoute,
-              onGenerateRoute: onGenerateRoute,
-              onGenerateInitialRoutes: onGenerateInitialRoutes,
-              onUnknownRoute: onUnknownRoute,
-              onNavigationNotification: onNavigationNotification,
-              navigatorObservers: navigatorObservers ?? [],
-              builder: builder,
-              title: title,
-              onGenerateTitle: onGenerateTitle,
-              color: color,
-              highContrastTheme: highContrastTheme,
-              highContrastDarkTheme: highContrastDarkTheme,
-              darkTheme: ThemeData(
-                useMaterial3: false,
-                brightness: colorScheme.brightness,
-                colorScheme: colorScheme,
-                textTheme: theme.textTheme,
-                scaffoldBackgroundColor: colorScheme.surface,
-                appBarTheme: AppBarTheme(
-                  backgroundColor: colorScheme.surface,
-                  foregroundColor: colorScheme.onSurface,
-                ),
-              ),
-              theme: ThemeData(
-                useMaterial3: false,
-                brightness: colorScheme.brightness,
-                colorScheme: colorScheme,
-                textTheme: theme.textTheme,
-                scaffoldBackgroundColor: colorScheme.surface,
-                appBarTheme: AppBarTheme(
-                  backgroundColor: colorScheme.surface,
-                  foregroundColor: colorScheme.onSurface,
-                ),
-              ),
-              themeMode: theme.themeMode,
-              themeAnimationDuration: themeAnimationDuration,
-              themeAnimationCurve: themeAnimationCurve,
-              locale: locale,
-              localizationsDelegates: localizationsDelegates,
-              localeListResolutionCallback: localeListResolutionCallback,
-              localeResolutionCallback: localeResolutionCallback,
-              supportedLocales: supportedLocales,
-              debugShowMaterialGrid: debugShowMaterialGrid,
-              showPerformanceOverlay: showPerformanceOverlay,
-              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-              showSemanticsDebugger: showSemanticsDebugger,
-              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-              shortcuts: shortcuts,
-              actions: actions,
-              restorationScopeId: restorationScopeId,
-              scrollBehavior: scrollBehavior,
-              useInheritedMediaQuery: useInheritedMediaQuery,
-              themeAnimationStyle: themeAnimationStyle,
-              navigatorKey: navigatorKey,
-              scaffoldMessengerKey: scaffoldMessengerKey,
-            ),
+        );
+      },
     );
   }
 }

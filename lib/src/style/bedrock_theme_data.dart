@@ -29,6 +29,7 @@ class BedrockThemeData {
       surfaceContainer: Color(0xffFCFCFC),
       surfaceContainerHigh: Color(0xffFAFBFF),
       surfaceContainerHighest: Color(0xffEFF0F3),
+      onSurfaceVariant: Color(0xffA3A5B0),
     ),
     this.colorSchemeDark = const BedrockColorScheme(
       brightness: Brightness.dark,
@@ -43,6 +44,7 @@ class BedrockThemeData {
       surfaceContainer: Color(0xff1A1C20),
       surfaceContainerHigh: Color(0xff212327),
       surfaceContainerHighest: Color(0xff2D2F33),
+      onSurfaceVariant: Color(0xff7F8196),
     ),
     this.textTheme = const TextTheme(
       displayLarge: BedrockTypography.displayLarge,
