@@ -29,15 +29,15 @@ class BedrockTypography {
   // Headline styles
   static const TextStyle headlineLarge = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 36,
+    fontSize: 42,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.0,
-    height: 1.25,
+    height: 1.35,
   );
 
   static const TextStyle headlineMedium = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 30,
+    fontSize: 36,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.0,
     height: 1.3,
@@ -45,7 +45,7 @@ class BedrockTypography {
 
   static const TextStyle headlineSmall = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.0,
     height: 1.35,
@@ -54,33 +54,57 @@ class BedrockTypography {
   // Title styles
   static const TextStyle titleLarge = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 20,
-    fontWeight: FontWeight.w500,
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
     height: 1.4,
   );
 
   static const TextStyle titleMedium = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.1,
     height: 1.45,
   );
 
   static const TextStyle titleSmall = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontSize: 21,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.1,
     height: 1.5,
+  );
+
+  static const TextStyle subtitleSmall = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.1,
+    height: 1.4,
+  );
+
+  static const TextStyle subtitleMedium = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.1,
+    height: 1.4,
+  );
+
+  static const TextStyle subtitleLarge = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.1,
+    height: 1.4,
   );
 
   // Body styles
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: 'Inter',
     fontSize: 18,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
     height: 1.5,
   );
@@ -95,7 +119,7 @@ class BedrockTypography {
 
   static const TextStyle bodySmall = TextStyle(
     fontFamily: 'Inter',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
     height: 1.4,
@@ -125,21 +149,4 @@ class BedrockTypography {
     letterSpacing: 0.5,
     height: 1.2,
   );
-
-  // Legacy aliases for backward compatibility
-  static const TextStyle caption = labelSmall;
-  static const TextStyle label = titleSmall;
-  static const TextStyle normalText = bodyLarge;
-  static const TextStyle normalTextBold = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0.5,
-    height: 1.5,
-  );
-  static const TextStyle subtitle = headlineSmall;
-  static const TextStyle subtitleBig = displaySmall;
-  static const TextStyle title = headlineLarge;
-  static const TextStyle titleBig = displaySmall;
-  static const TextStyle titleHuge = displayMedium;
 }

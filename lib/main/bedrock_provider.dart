@@ -7,11 +7,17 @@ class BedrockTheme extends InheritedWidget {
     required this.theme,
     required super.child,
     this.colorScheme,
+    required this.toggleTheme,
+    required this.setColorScheme,
   });
 
   final BedrockThemeData theme;
 
   final String? colorScheme;
+
+  final VoidCallback toggleTheme;
+
+  final void Function(String colorSchemeName) setColorScheme;
 
   static BedrockThemeData? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<BedrockTheme>()?.theme;
@@ -21,6 +27,10 @@ class BedrockTheme extends InheritedWidget {
     final BedrockThemeData? result = maybeOf(context);
     assert(result != null, 'No BedrockTheme found in context');
     return result!;
+  }
+
+  static BedrockTheme? provider(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<BedrockTheme>();
   }
 
   @override

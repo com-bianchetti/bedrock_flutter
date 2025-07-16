@@ -14,5 +14,6 @@ class BedrockColorScheme extends ColorScheme {
     super.surfaceContainer = const Color(0xffFCFCFC),
     super.surfaceContainerHigh = const Color(0xffFAFBFF),
     super.surfaceContainerHighest = const Color(0xffEFF0F3),
+    super.onSurfaceVariant = const Color(0xffA3A5B0),
   });
 }
